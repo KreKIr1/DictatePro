@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DictatePro - Профессиональный генератор диктовки текста</title>
+    <meta name="description" content="Бесплатный онлайн генератор диктовки текста с настраиваемой скоростью, паузами и экспортом аудио. Идеально для изучения языков, диктантов и аудирования.">
+    <meta name="keywords" content="диктовка текста, генератор речи, текст в речь, онлайн диктовка, изучение языков, аудирование">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --donate-color: #ff6b6b;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --text-color: #333;
+            --bg-color: #fff;
+        }
+        
+        .dark-theme {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --warning-color: #d35400;
+            --donate-color: #ff5252;
+            --dark-color: #34495e;
+            --light-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --bg-color: #1a252f;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        /* Рекламные боковые панели */
+        .ad-sidebar {
+            width: 160px;
+            min-width: 160px;
+            background-color: var(--light-color);
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-right: 1px solid #ddd;
+        }
+        
+        .ad-sidebar.right {
+            border-right: none;
+            border-left: 1px solid #ddd;
+        }
+        
+        .ad-placeholder {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 2px dashed #a0a0a0;
+            border-radius: 8px;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        /* Основной контент */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            min-width: 0;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .dark-theme .header {
+            border-bottom-color: #34495e;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .user-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-name {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .logout-btn {
+            background: none;
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .logout-btn:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Кнопка доната */
+        .donate-btn {
+            background: linear-gradient(135deg, var(--donate-color), #ff8e8e);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .donate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .donate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .donate-icon {
+            font-size: 18px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Стили для рекламных блоков */
+        .ad-container {
+            width: 100%;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .ad-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        
+        /* Адаптивность для мобильных */
+        @media (max-width: 1200px) {
+            .ad-sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .user-controls {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+            
+            .donate-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+
+        /* Остальные стили */
+        .auth-section {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .auth-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .auth-tab.active {
+            border-bottom-color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .form-error {
+            color: var(--danger-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .guest-notice {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .dark-theme .guest-notice {
+            background-color: #665c00;
+            color: #fff3cd;
+        }
+        
+        .guest-promo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .close-promo {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        
+        .close-promo:hover {
+            opacity: 1;
+        }
+        
+        .promo-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .promo-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        
+        .promo-feature::before {
+            content: "✓";
+            background: var(--success-color);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+        }
+        
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: var(--light-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .control-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="number"], select, input[type="range"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        input[type="range"] {
+            padding: 0;
+        }
+        
+        .range-value {
+            text-align: center;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        
+        .text-areas {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: vertical;
+            line-height: 1.5;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .dark-theme .progress-bar {
+            background-color: #34495e;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--light-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .current-element {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            min-height: 40px;
+            padding: 10px;
+            background-color: var(--light-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .current-element.highlight-word {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .current-element.highlight-punctuation {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .dark-theme .current-element.highlight-word {
+            background-color: #665c00;
+            color: #fff3cd;
+        }
+        
+        .dark-theme .current-element.highlight-punctuation {
+            background-color: #004085;
+            color: #cce7ff;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 500;
+            background-color: var(--light-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .status.active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .dark-theme .status.active {
+            background-color: #155724;
+            color: #d4edda;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .dark-theme .footer {
+            border-top-color: #34495e;
+        }
+        
+        .contact-link {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            background-color: var(--success-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background-color: var(--danger-color);
+        }
+        
+        @media (max-width: 768px) {
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .stats-panel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .promo-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Левая рекламная панель -->
+        <div class="ad-sidebar">
+            <div class="ad-container">
+                <div class="ad-label">Реклама</div>
+                <!-- Первый рекламный блок 160x600 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            <div class="ad-container">
+                <div class="ad-label">Реклама</div>
+                <!-- Второй рекламный блок 160x600 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+        
+        <!-- Основной контент -->
+        <div class="main-content">
+            <!-- Шапка -->
+            <header class="header">
+                <div class="logo">DictatePro</div>
+                <div class="user-controls">
+                    <div class="user-info" id="user-info" style="display: none;">
+                        <span class="user-name" id="user-name"></span>
+                        <button class="logout-btn" id="logout-btn">Выйти</button>
+                    </div>
+                    <!-- Кнопка поддержки -->
+                    <a href="https://www.donationalerts.com/r/krekir1" 
+                       target="_blank" 
+                       class="donate-btn"
+                       title="Поддержать разработчика">
+                        <span class="donate-icon">💝</span>
+                        Поддержать
+                    </a>
+                    <button class="theme-toggle" id="theme-toggle">🌙</button>
+                    <button class="btn-secondary" id="export-audio">Экспорт MP3</button>
+                </div>
+            </header>
+            
+            <!-- Система аккаунтов -->
+            <section class="auth-section" id="auth-section">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login">Вход</div>
+                    <div class="auth-tab" data-tab="register">Регистрация</div>
+                    <div class="auth-tab" data-tab="guest">Гость</div>
+                </div>
+                
+                <div class="auth-form active" id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="Ваш email">
+                        <div class="form-error" id="login-email-error">Неверный email или пароль</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Пароль</label>
+                        <input type="password" id="login-password" placeholder="Ваш пароль">
+                        <div class="form-error" id="login-password-error">Неверный email или пароль</div>
+                    </div>
+                    <button class="btn-primary" id="login-btn">Войти</button>
+                </div>
+                
+                <div class="auth-form" id="register-form">
+                    <div class="form-group">
+                        <label for="register-name">Имя</label>
+                        <input type="text" id="register-name" placeholder="Ваше имя">
+                        <div class="form-error" id="register-name-error">Имя должно содержать от 2 до 30 символов</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" placeholder="Ваш email">
+                        <div class="form-error" id="register-email-error">Некорректный email или он уже используется</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Пароль</label>
+                        <input type="password" id="register-password" placeholder="Придумайте пароль">
+                        <div class="form-error" id="register-password-error">Пароль должен содержать минимум 6 символов</div>
+                    </div>
+                    <button class="btn-primary" id="register-btn">Зарегистрироваться</button>
+                </div>
+                
+                <div class="auth-form" id="guest-form">
+                    <p>Вы вошли как гость. Настройки не будут сохранены.</p>
+                    <button class="btn-secondary" id="guest-btn">Продолжить как гость</button>
+                    <div class="guest-notice">
+                        Для сохранения настроек и истории рекомендуется зарегистрироваться.
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Основной контент (скрыт до авторизации) -->
+            <div id="main-content" style="display: none;">
+                <!-- Промо-блок для гостей -->
+                <div class="guest-promo" id="guest-promo" style="display: none;">
+                    <button class="close-promo" id="close-promo">×</button>
+                    <h3>🚀 Нравится сервис?</h3>
+                    <p>Поддержите разработчика, чтобы проект развивался дальше! Каждое пожертвование помогает улучшать DictatePro.</p>
+                    
+                    <div class="promo-features">
+                        <div class="promo-feature">Бесплатный доступ для всех</div>
+                        <div class="promo-feature">Постоянные обновления</div>
+                        <div class="promo-feature">Техническая поддержка</div>
+                        <div class="promo-feature">Новые функции</div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <a href="https://www.donationalerts.com/r/krekir1" 
+                           target="_blank" 
+                           class="btn-success"
+                           style="text-decoration: none;">
+                            💝 Поддержать проект
+                        </a>
+                        <button class="btn-secondary" id="keep-guest-btn">Продолжить использование</button>
+                    </div>
+                </div>
+                
+                <!-- Панель управления -->
+                <section class="control-panel">
+                    <div class="control-group">
+                        <label for="pause-time">Пауза между словами (секунды):</label>
+                        <input type="number" id="pause-time" min="0.1" max="10" step="0.1" value="1">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="short-pause-time">Пауза после коротких слов (секунды):</label>
+                        <input type="number" id="short-pause-time" min="0.1" max="10" step="0.1" value="0.5" disabled>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="speed-rate">Скорость речи:</label>
+                        <input type="range" id="speed-rate" min="0.5" max="2" step="0.1" value="1">
+                        <div class="range-value" id="speed-value">1.0x</div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="voice-select">Выберите голос:</label>
+                        <select id="voice-select">
+                            <option value="">Системный голос по умолчанию</option>
+                        </select>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="pronounce-punctuation" checked>
+                            <label for="pronounce-punctuation">Произносить знаки препинания</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="dark-theme-checkbox">
+                            <label for="dark-theme-checkbox">Тёмная тема</label>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Кнопки управления -->
+                <div class="buttons">
+                    <button id="start-btn" class="btn-primary">Начать диктовку</button>
+                    <button id="pause-btn" class="btn-secondary">Пауза (Пробел)</button>
+                    <button id="resume-btn" class="btn-success">Продолжить</button>
+                    <button id="stop-btn" class="btn-danger">Остановить (Esc)</button>
+                    <button id="stats-btn" class="btn-warning">Статистика</button>
+                    <button id="save-guest-btn" class="btn-info" style="display: none;">Сохранить настройки</button>
+                </div>
+                
+                <!-- Прогресс и статистика -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-bar"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">Готов к работе</div>
+                </div>
+                
+                <div class="stats-panel" id="stats-panel" style="display: none;">
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-words">0</div>
+                        <div class="stat-label">Слов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-time">0:00</div>
+                        <div class="stat-label">Время</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-speed">0</div>
+                        <div class="stat-label">Слов/мин</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-punctuation">0</div>
+                        <div class="stat-label">Знаков препинания</div>
+                    </div>
+                </div>
+                
+                <!-- Текущий элемент -->
+                <div class="current-element" id="current-element"></div>
+                
+                <!-- Текстовые области -->
+                <div class="text-areas">
+                    <textarea id="input-text" placeholder="Введите текст для диктовки...">Пример текста для диктовки. Это предложение содержит разные слова, знаки препинания и даже восклицание! А также вопрос? Короткие слова, такие как "и", "в", "на" будут иметь сокращенную паузу перед следующим словом.</textarea>
+                </div>
+                
+                <!-- Статус -->
+                <div class="status" id="status">Готов к работе</div>
+            </div>
+            
+            <!-- Футер -->
+            <footer class="footer">
+                <p>DictatePro &copy; 2023. Профессиональный генератор диктовки текста.</p>
+                <p>Поддержите проект: 
+                    <a href="https://www.donationalerts.com/r/krekir1" 
+                       target="_blank" 
+                       class="contact-link"
+                       style="color: var(--donate-color); font-weight: 600;">
+                        💝 Сделать донат
+                    </a>
+                </p>
+                <p>Обратная связь: <a href="mailto:karpinchik.k1014@gmail.com" class="contact-link">karpinchik.k1014@gmail.com</a></p>
+                <p style="font-size: 12px; margin-top: 10px;">Мы используем cookies для улучшения работы сайта</p>
+            </footer>
+        </div>
+        
+        <!-- Правая рекламная панель -->
+        <div class="ad-sidebar right">
+            <div class="ad-container">
+                <div class="ad-label">Реклама</div>
+                <!-- Третий рекламный блок 160x600 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            <div class="ad-container">
+                <div class="ad-label">Реклама</div>
+                <!-- Четвертый рекламный блок 160x600 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Уведомления -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // ВАЖНО: Замените все 'ca-pub-XXXXXXXXXXXXXX' на ваш реальный AdSense ID
+
+        // Система хранения данных
+        const Storage = {
+            KEYS: {
+                USERS: 'dictatepro_users',
+                CURRENT_USER: 'dictatepro_current_user',
+                SETTINGS: 'dictatepro_settings',
+                GUEST_MODE: 'dictatepro_guest_mode',
+                GUEST_SETTINGS: 'dictatepro_guest_settings',
+                THEME: 'dictatepro_theme'
+            },
+
+            init() {
+                if (!this.getUsers()) {
+                    this.setUsers([]);
+                }
+            },
+
+            getUsers() {
+                return JSON.parse(localStorage.getItem(this.KEYS.USERS)) || [];
+            },
+
+            setUsers(users) {
+                localStorage.setItem(this.KEYS.USERS, JSON.stringify(users));
+            },
+
+            addUser(user) {
+                const users = this.getUsers();
+                users.push(user);
+                this.setUsers(users);
+            },
+
+            findUserByEmail(email) {
+                const users = this.getUsers();
+                return users.find(user => user.email === email);
+            },
+
+            setCurrentUser(user) {
+                localStorage.setItem(this.KEYS.CURRENT_USER, JSON.stringify(user));
+            },
+
+            getCurrentUser() {
+                return JSON.parse(localStorage.getItem(this.KEYS.CURRENT_USER));
+            },
+
+            clearCurrentUser() {
+                localStorage.removeItem(this.KEYS.CURRENT_USER);
+            },
+
+            setGuestMode(isGuest) {
+                localStorage.setItem(this.KEYS.GUEST_MODE, isGuest);
+            },
+
+            isGuestMode() {
+                return localStorage.getItem(this.KEYS.GUEST_MODE) === 'true';
+            },
+
+            saveSettings(userId, settings) {
+                const allSettings = this.getSettings();
+                allSettings[userId] = settings;
+                localStorage.setItem(this.KEYS.SETTINGS, JSON.stringify(allSettings));
+            },
+
+            getSettings() {
+                return JSON.parse(localStorage.getItem(this.KEYS.SETTINGS)) || {};
+            },
+
+            getUserSettings(userId) {
+                const allSettings = this.getSettings();
+                return allSettings[userId] || null;
+            },
+
+            saveGuestSettings(settings) {
+                localStorage.setItem(this.KEYS.GUEST_SETTINGS, JSON.stringify(settings));
+            },
+
+            getGuestSettings() {
+                return JSON.parse(localStorage.getItem(this.KEYS.GUEST_SETTINGS)) || null;
+            },
+
+            clearGuestSettings() {
+                localStorage.removeItem(this.KEYS.GUEST_SETTINGS);
+            },
+
+            getTheme() {
+                return localStorage.getItem(this.KEYS.THEME);
+            },
+
+            setTheme(theme) {
+                localStorage.setItem(this.KEYS.THEME, theme);
+            }
+        };
+
+        // Валидация форм
+        const Validator = {
+            email(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            },
+
+            name(name) {
+                return name && name.length >= 2 && name.length <= 30;
+            },
+
+            password(password) {
+                return password && password.length >= 6;
+            },
+
+            validateLogin(email, password) {
+                const errors = {};
+                if (!this.email(email)) errors.email = 'Некорректный email';
+                if (!this.password(password)) errors.password = 'Пароль слишком короткий';
+                return errors;
+            },
+
+            validateRegister(name, email, password) {
+                const errors = {};
+                if (!this.name(name)) errors.name = 'Имя должно содержать от 2 до 30 символов';
+                if (!this.email(email)) errors.email = 'Некорректный email';
+                if (!this.password(password)) errors.password = 'Пароль должен содержать минимум 6 символов';
+                return errors;
+            }
+        };
+
+        // Основной объект приложения
+        const app = {
+            state: {
+                isPlaying: false,
+                isPaused: false,
+                isLoggedIn: false,
+                isGuest: false,
+                currentUser: null,
+                voices: [],
+                currentElementIndex: 0,
+                paragraphs: [],
+                totalElements: 0,
+                processedElements: 0,
+                startTime: null,
+                wordsCount: 0,
+                punctuationCount: 0,
+                guestSettings: null
+            },
+
+            elements: {},
+
+            init() {
+                Storage.init();
+                this.cacheElements();
+                this.setupEventListeners();
+                this.loadVoices();
+                this.updateSpeedValue();
+                this.checkAuthStatus();
+                this.initializeTheme();
+                
+                this.elements.pauseTime.addEventListener('input', () => {
+                    this.elements.shortPauseTime.value = (this.elements.pauseTime.value / 2).toFixed(1);
+                });
+            },
+
+            initializeTheme() {
+                const savedTheme = Storage.getTheme();
+                const isDark = savedTheme === 'dark' || 
+                              (savedTheme === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                
+                this.elements.darkThemeCheckbox.checked = isDark;
+                this.toggleTheme();
+            },
+
+            cacheElements() {
+                this.elements = {
+                    authSection: document.getElementById('auth-section'),
+                    authTabs: document.querySelectorAll('.auth-tab'),
+                    authForms: document.querySelectorAll('.auth-form'),
+                    loginBtn: document.getElementById('login-btn'),
+                    registerBtn: document.getElementById('register-btn'),
+                    guestBtn: document.getElementById('guest-btn'),
+                    userInfo: document.getElementById('user-info'),
+                    userName: document.getElementById('user-name'),
+                    logoutBtn: document.getElementById('logout-btn'),
+                    mainContent: document.getElementById('main-content'),
+                    guestPromo: document.getElementById('guest-promo'),
+                    closePromo: document.getElementById('close-promo'),
+                    keepGuestBtn: document.getElementById('keep-guest-btn'),
+                    saveGuestBtn: document.getElementById('save-guest-btn'),
+                    inputText: document.getElementById('input-text'),
+                    pauseTime: document.getElementById('pause-time'),
+                    shortPauseTime: document.getElementById('short-pause-time'),
+                    speedRate: document.getElementById('speed-rate'),
+                    speedValue: document.getElementById('speed-value'),
+                    startBtn: document.getElementById('start-btn'),
+                    pauseBtn: document.getElementById('pause-btn'),
+                    resumeBtn: document.getElementById('resume-btn'),
+                    stopBtn: document.getElementById('stop-btn'),
+                    statsBtn: document.getElementById('stats-btn'),
+                    status: document.getElementById('status'),
+                    currentElement: document.getElementById('current-element'),
+                    voiceSelect: document.getElementById('voice-select'),
+                    pronouncePunctuation: document.getElementById('pronounce-punctuation'),
+                    darkThemeCheckbox: document.getElementById('dark-theme-checkbox'),
+                    themeToggle: document.getElementById('theme-toggle'),
+                    exportAudio: document.getElementById('export-audio'),
+                    progressBar: document.getElementById('progress-bar'),
+                    progressText: document.getElementById('progress-text'),
+                    statsPanel: document.getElementById('stats-panel'),
+                    statWords: document.getElementById('stat-words'),
+                    statTime: document.getElementById('stat-time'),
+                    statSpeed: document.getElementById('stat-speed'),
+                    statPunctuation: document.getElementById('stat-punctuation'),
+                    notification: document.getElementById('notification')
+                };
+            },
+
+            setupEventListeners() {
+                this.elements.authTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        this.switchAuthTab(tab.dataset.tab);
+                    });
+                });
+                
+                this.elements.loginBtn.addEventListener('click', () => this.login());
+                this.elements.registerBtn.addEventListener('click', () => this.register());
+                this.elements.guestBtn.addEventListener('click', () => this.continueAsGuest());
+                this.elements.logoutBtn.addEventListener('click', () => this.logout());
+                
+                this.elements.closePromo.addEventListener('click', () => this.hidePromo());
+                this.elements.keepGuestBtn.addEventListener('click', () => this.hidePromo());
+                this.elements.saveGuestBtn.addEventListener('click', () => this.saveGuestSettings());
+                
+                this.elements.startBtn.addEventListener('click', () => this.startDictation());
+                this.elements.pauseBtn.addEventListener('click', () => this.pauseDictation());
+                this.elements.resumeBtn.addEventListener('click', () => this.resumeDictation());
+                this.elements.stopBtn.addEventListener('click', () => this.stopDictation());
+                this.elements.statsBtn.addEventListener('click', () => this.toggleStats());
+                this.elements.exportAudio.addEventListener('click', () => this.exportAudio());
+                
+                this.elements.speedRate.addEventListener('input', () => this.updateSpeedValue());
+                this.elements.darkThemeCheckbox.addEventListener('change', () => this.toggleTheme());
+                this.elements.themeToggle.addEventListener('click', () => this.toggleThemeManual());
+                
+                this.elements.pauseTime.addEventListener('change', () => this.saveSettings());
+                this.elements.speedRate.addEventListener('change', () => this.saveSettings());
+                this.elements.voiceSelect.addEventListener('change', () => this.saveSettings());
+                this.elements.pronouncePunctuation.addEventListener('change', () => this.saveSettings());
+                this.elements.darkThemeCheckbox.addEventListener('change', () => this.saveSettings());
+                
+                document.addEventListener('keydown', (e) => this.handleHotkeys(e));
+            },
+
+            checkAuthStatus() {
+                const currentUser = Storage.getCurrentUser();
+                const isGuest = Storage.isGuestMode();
+                
+                if (currentUser) {
+                    this.state.isLoggedIn = true;
+                    this.state.currentUser = currentUser;
+                    this.showMainContent();
+                    this.loadUserSettings();
+                    this.showNotification(`С возвращением, ${currentUser.name}!`);
+                } else if (isGuest) {
+                    this.state.isGuest = true;
+                    this.showMainContent();
+                    this.loadGuestSettings();
+                    this.showGuestPromo();
+                    this.showNotification('Вы вошли как гость');
+                }
+            },
+
+            switchAuthTab(tabName) {
+                this.elements.authTabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabName);
+                });
+                
+                this.elements.authForms.forEach(form => {
+                    form.classList.toggle('active', form.id === `${tabName}-form`);
+                });
+                
+                this.clearFormErrors();
+            },
+
+            login() {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                const errors = Validator.validateLogin(email, password);
+                if (Object.keys(errors).length > 0) {
+                    this.showFormErrors('login', errors);
+                    return;
+                }
+                
+                const user = Storage.findUserByEmail(email);
+                if (!user || user.password !== password) {
+                    this.showFormErrors('login', { 
+                        email: 'Неверный email или пароль', 
+                        password: 'Неверный email или пароль' 
+                    });
+                    return;
+                }
+                
+                this.state.isLoggedIn = true;
+                this.state.currentUser = user;
+                Storage.setCurrentUser(user);
+                Storage.setGuestMode(false);
+                
+                this.showMainContent();
+                this.loadUserSettings();
+                this.showNotification(`Добро пожаловать, ${user.name}!`);
+            },
+
+            register() {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                
+                const errors = Validator.validateRegister(name, email, password);
+                if (Object.keys(errors).length > 0) {
+                    this.showFormErrors('register', errors);
+                    return;
+                }
+                
+                if (Storage.findUserByEmail(email)) {
+                    this.showFormErrors('register', { email: 'Этот email уже используется' });
+                    return;
+                }
+                
+                const user = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    password: password,
+                    createdAt: new Date().toISOString()
+                };
+                
+                Storage.addUser(user);
+                Storage.setCurrentUser(user);
+                Storage.setGuestMode(false);
+                
+                this.state.isLoggedIn = true;
+                this.state.currentUser = user;
+                
+                if (this.state.isGuest && this.state.guestSettings) {
+                    this.transferGuestSettingsToUser();
+                }
+                
+                this.showMainContent();
+                this.saveSettings();
+                this.showNotification(`Регистрация успешна! Добро пожаловать, ${name}!`);
+            },
+
+            continueAsGuest() {
+                this.state.isGuest = true;
+                Storage.setGuestMode(true);
+                Storage.clearCurrentUser();
+                
+                this.showMainContent();
+                this.loadGuestSettings();
+                this.showGuestPromo();
+                this.showNotification('Вы вошли как гость. Настройки не будут сохранены.');
+            },
+
+            logout() {
+                this.state.isLoggedIn = false;
+                this.state.isGuest = false;
+                this.state.currentUser = null;
+                
+                Storage.clearCurrentUser();
+                Storage.setGuestMode(false);
+                
+                this.showAuthSection();
+                this.showNotification('Вы вышли из системы');
+            },
+
+            showGuestPromo() {
+                this.elements.guestPromo.style.display = 'block';
+                this.elements.saveGuestBtn.style.display = 'block';
+            },
+
+            hidePromo() {
+                this.elements.guestPromo.style.display = 'none';
+                this.showNotification('Вы можете зарегистрироваться в любое время через меню.');
+            },
+
+            saveGuestSettings() {
+                if (!this.state.isGuest) return;
+                
+                const settings = {
+                    pauseTime: this.elements.pauseTime.value,
+                    speedRate: this.elements.speedRate.value,
+                    voiceSelect: this.elements.voiceSelect.value,
+                    pronouncePunctuation: this.elements.pronouncePunctuation.checked,
+                    darkTheme: this.elements.darkThemeCheckbox.checked,
+                    lastUsedText: this.elements.inputText.value,
+                    lastUsedName: prompt('Введите ваше имя для будущей регистрации (необязательно):', '') || '',
+                    savedAt: new Date().toISOString()
+                };
+                
+                Storage.saveGuestSettings(settings);
+                this.state.guestSettings = settings;
+                this.showNotification('Настройки временно сохранены! Зарегистрируйтесь, чтобы сохранить их навсегда.');
+            },
+
+            loadGuestSettings() {
+                const settings = Storage.getGuestSettings();
+                if (settings) {
+                    this.state.guestSettings = settings;
+                    this.elements.pauseTime.value = settings.pauseTime || 1;
+                    this.elements.speedRate.value = settings.speedRate || 1;
+                    this.elements.voiceSelect.value = settings.voiceSelect || '';
+                    this.elements.pronouncePunctuation.checked = settings.pronouncePunctuation !== false;
+                    this.elements.darkThemeCheckbox.checked = settings.darkTheme || false;
+                    
+                    if (settings.lastUsedText) {
+                        this.elements.inputText.value = settings.lastUsedText;
+                    }
+                    
+                    this.updateSpeedValue();
+                    this.toggleTheme();
+                }
+            },
+
+            transferGuestSettingsToUser() {
+                if (this.state.guestSettings && this.state.isLoggedIn) {
+                    const userSettings = {
+                        pauseTime: this.state.guestSettings.pauseTime,
+                        speedRate: this.state.guestSettings.speedRate,
+                        voiceSelect: this.state.guestSettings.voiceSelect,
+                        pronouncePunctuation: this.state.guestSettings.pronouncePunctuation,
+                        darkTheme: this.state.guestSettings.darkTheme
+                    };
+                    
+                    Storage.saveSettings(this.state.currentUser.id, userSettings);
+                    Storage.clearGuestSettings();
+                    this.state.guestSettings = null;
+                    
+                    this.showNotification('Ваши гостевые настройки перенесены в аккаунт!');
+                }
+            },
+
+            showMainContent() {
+                this.elements.authSection.style.display = 'none';
+                this.elements.mainContent.style.display = 'block';
+                
+                if (this.state.isLoggedIn) {
+                    this.elements.userInfo.style.display = 'flex';
+                    this.elements.userName.textContent = this.state.currentUser.name;
+                    this.elements.guestPromo.style.display = 'none';
+                    this.elements.saveGuestBtn.style.display = 'none';
+                } else {
+                    this.elements.userInfo.style.display = 'none';
+                }
+            },
+
+            showAuthSection() {
+                this.elements.authSection.style.display = 'block';
+                this.elements.mainContent.style.display = 'none';
+                this.elements.userInfo.style.display = 'none';
+                this.elements.guestPromo.style.display = 'none';
+                this.elements.saveGuestBtn.style.display = 'none';
+                
+                this.clearForms();
+            },
+
+            clearForms() {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+                document.getElementById('register-name').value = '';
+                document.getElementById('register-email').value = '';
+                document.getElementById('register-password').value = '';
+                this.clearFormErrors();
+            },
+
+            clearFormErrors() {
+                document.querySelectorAll('.form-error').forEach(error => {
+                    error.style.display = 'none';
+                });
+            },
+
+            showFormErrors(formType, errors) {
+                this.clearFormErrors();
+                
+                Object.keys(errors).forEach(field => {
+                    const errorElement = document.getElementById(`${formType}-${field}-error`);
+                    if (errorElement) {
+                        errorElement.textContent = errors[field];
+                        errorElement.style.display = 'block';
+                    }
+                });
+            },
+
+            saveSettings() {
+                if (this.state.isLoggedIn) {
+                    const settings = {
+                        pauseTime: this.elements.pauseTime.value,
+                        speedRate: this.elements.speedRate.value,
+                        voiceSelect: this.elements.voiceSelect.value,
+                        pronouncePunctuation: this.elements.pronouncePunctuation.checked,
+                        darkTheme: this.elements.darkThemeCheckbox.checked
+                    };
+                    
+                    Storage.saveSettings(this.state.currentUser.id, settings);
+                }
+            },
+
+            loadUserSettings() {
+                if (!this.state.isLoggedIn) return;
+                
+                const settings = Storage.getUserSettings(this.state.currentUser.id);
+                if (settings) {
+                    this.elements.pauseTime.value = settings.pauseTime || 1;
+                    this.elements.speedRate.value = settings.speedRate || 1;
+                    this.elements.voiceSelect.value = settings.voiceSelect || '';
+                    this.elements.pronouncePunctuation.checked = settings.pronouncePunctuation !== false;
+                    this.elements.darkThemeCheckbox.checked = settings.darkTheme || false;
+                    
+                    this.updateSpeedValue();
+                    this.toggleTheme();
+                }
+            },
+
+            updateSpeedValue() {
+                this.elements.speedValue.textContent = `${this.elements.speedRate.value}x`;
+            },
+
+            toggleTheme() {
+                const isDark = this.elements.darkThemeCheckbox.checked;
+                document.body.classList.toggle('dark-theme', isDark);
+                this.elements.themeToggle.textContent = isDark ? '☀️' : '🌙';
+                Storage.setTheme(isDark ? 'dark' : 'light');
+                this.saveSettings();
+            },
+
+            toggleThemeManual() {
+                this.elements.darkThemeCheckbox.checked = !this.elements.darkThemeCheckbox.checked;
+                this.toggleTheme();
+            },
+
+            loadVoices() {
+                // Ждем загрузки голосов
+                setTimeout(() => {
+                    this.state.voices = window.speechSynthesis.getVoices();
+                    this.elements.voiceSelect.innerHTML = '<option value="">Системный голос по умолчанию</option>';
+                    
+                    const russianVoices = this.state.voices.filter(voice => 
+                        voice.lang.includes('ru') || voice.lang.includes('RU'));
+                    
+                    russianVoices.forEach((voice, index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        this.elements.voiceSelect.appendChild(option);
+                    });
+                }, 100);
+            },
+
+            showNotification(message, type = 'success') {
+                const notification = this.elements.notification;
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            },
+
+            // Методы управления диктовкой
+            startDictation() {
+                const text = this.elements.inputText.value.trim();
+                if (!text) {
+                    this.showNotification('Пожалуйста, введите текст для диктовки', 'error');
+                    return;
+                }
+                
+                // Останавливаем предыдущую диктовку
+                if (this.state.isPlaying) {
+                    this.stopDictation();
+                }
+                
+                this.state.paragraphs = this.parseText(text);
+                if (this.state.paragraphs.length === 0) {
+                    this.showNotification('Текст не содержит элементов для диктовки', 'error');
+                    return;
+                }
+                
+                this.state.totalElements = this.state.paragraphs.length;
+                this.state.processedElements = 0;
+                this.state.wordsCount = 0;
+                this.state.punctuationCount = 0;
+                this.state.startTime = new Date();
+                this.state.currentElementIndex = 0;
+                
+                this.updateProgress();
+                this.updateStats();
+                
+                this.state.isPlaying = true;
+                this.state.isPaused = false;
+                
+                this.elements.status.textContent = 'Диктовка началась';
+                this.elements.status.className = 'status active';
+                
+                this.speakNextElement();
+            },
+
+            parseText(text) {
+                const result = [];
+                
+                // Улучшенный парсинг текста
+                const tokens = text.split(/(\s+|[.,!?;:()\-—"])/).filter(token => token.trim() !== '');
+                
+                tokens.forEach(token => {
+                    const trimmed = token.trim();
+                    if (!trimmed) return;
+                    
+                    // Проверяем, является ли элемент знаком препинания
+                    if (/^[.,!?;:()\-—"]$/.test(trimmed)) {
+                        result.push({
+                            type: 'punctuation',
+                            value: trimmed,
+                            pronunciation: this.getPunctuationPronunciation(trimmed)
+                        });
+                    } else if (trimmed !== ' ') {
+                        result.push({
+                            type: 'word',
+                            value: trimmed
+                        });
+                    }
+                });
+                
+                return result;
+            },
+
+            getPunctuationPronunciation(char) {
+                const map = {
+                    '.': 'точка',
+                    ',': 'запятая', 
+                    '!': 'восклицательный знак',
+                    '?': 'вопросительный знак', 
+                    ':': 'двоеточие', 
+                    ';': 'точка с запятой',
+                    '-': 'тире', 
+                    '(': 'открывающая скобка', 
+                    ')': 'закрывающая скобка',
+                    '"': 'кавычки',
+                    '—': 'длинное тире'
+                };
+                return map[char] || char;
+            },
+
+            speakNextElement() {
+                // Проверяем условия остановки
+                if (!this.state.isPlaying || this.state.isPaused) return;
+                
+                if (this.state.currentElementIndex >= this.state.paragraphs.length) {
+                    if (this.state.isPlaying) {
+                        this.finishDictation();
+                    }
+                    return;
+                }
+                
+                const element = this.state.paragraphs[this.state.currentElementIndex];
+                
+                // Визуальное отображение текущего элемента
+                this.elements.currentElement.textContent = element.value;
+                
+                if (element.type === 'word') {
+                    this.elements.currentElement.className = 'current-element highlight-word';
+                    this.state.wordsCount++;
+                } else {
+                    this.elements.currentElement.className = 'current-element highlight-punctuation';
+                    this.state.punctuationCount++;
+                }
+                
+                // Подготовка текста для произношения
+                let textToSpeak = element.value;
+                if (element.type === 'punctuation' && this.elements.pronouncePunctuation.checked) {
+                    textToSpeak = element.pronunciation;
+                }
+                
+                // Проверяем доступность SpeechSynthesis
+                if (!window.speechSynthesis) {
+                    this.showNotification('Ваш браузер не поддерживает синтез речи', 'error');
+                    this.stopDictation();
+                    return;
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.rate = parseFloat(this.elements.speedRate.value);
+                
+                // Выбор голоса
+                const selectedVoiceIndex = this.elements.voiceSelect.value;
+                if (selectedVoiceIndex && this.state.voices[selectedVoiceIndex]) {
+                    utterance.voice = this.state.voices[selectedVoiceIndex];
+                }
+                
+                utterance.onend = () => {
+                    this.elements.currentElement.className = 'current-element';
+                    
+                    // Определяем длительность паузы
+                    let pauseDuration = this.elements.pauseTime.value * 1000;
+                    if (element.type === 'word' && element.value.length < 4) {
+                        pauseDuration = this.elements.shortPauseTime.value * 1000;
+                    }
+                    
+                    this.state.processedElements++;
+                    this.state.currentElementIndex++;
+                    this.updateProgress();
+                    this.updateStats();
+                    
+                    // Следующий элемент с паузой
+                    setTimeout(() => {
+                        this.speakNextElement();
+                    }, pauseDuration);
+                };
+                
+                utterance.onerror = (event) => {
+                    console.error('SpeechSynthesis Error:', event);
+                    this.showNotification('Ошибка воспроизведения', 'error');
+                    this.stopDictation();
+                };
+                
+                // Запускаем произношение
+                window.speechSynthesis.speak(utterance);
+            },
+
+            pauseDictation() {
+                if (this.state.isPlaying && !this.state.isPaused) {
+                    this.state.isPaused = true;
+                    window.speechSynthesis.cancel();
+                    this.elements.status.textContent = 'Диктовка на паузе';
+                    this.elements.status.className = 'status';
+                }
+            },
+
+            resumeDictation() {
+                if (this.state.isPlaying && this.state.isPaused) {
+                    this.state.isPaused = false;
+                    this.elements.status.textContent = 'Диктовка продолжается';
+                    this.elements.status.className = 'status active';
+                    this.speakNextElement();
+                }
+            },
+
+            stopDictation() {
+                this.state.isPlaying = false;
+                this.state.isPaused = false;
+                window.speechSynthesis.cancel();
+                this.elements.currentElement.textContent = '';
+                this.elements.currentElement.className = 'current-element';
+                this.elements.status.textContent = 'Диктовка остановлена';
+                this.elements.status.className = 'status';
+                this.elements.progressBar.style.width = '0%';
+                this.elements.progressText.textContent = 'Готов к работе';
+            },
+
+            finishDictation() {
+                this.state.isPlaying = false;
+                this.elements.status.textContent = 'Диктовка завершена';
+                this.elements.status.className = 'status';
+                this.elements.currentElement.textContent = '';
+                this.elements.currentElement.className = 'current-element';
+                this.elements.progressBar.style.width = '100%';
+                this.elements.progressText.textContent = 'Диктовка завершена';
+                this.showNotification('Диктовка завершена успешно!');
+            },
+
+            updateProgress() {
+                if (this.state.totalElements > 0) {
+                    const progress = (this.state.processedElements / this.state.totalElements) * 100;
+                    this.elements.progressBar.style.width = `${progress}%`;
+                    this.elements.progressText.textContent = 
+                        `Прогресс: ${this.state.processedElements}/${this.state.totalElements} (${Math.round(progress)}%)`;
+                }
+            },
+
+            updateStats() {
+                this.elements.statWords.textContent = this.state.wordsCount;
+                this.elements.statPunctuation.textContent = this.state.punctuationCount;
+                
+                if (this.state.startTime) {
+                    const now = new Date();
+                    const diff = Math.floor((now - this.state.startTime) / 1000);
+                    const minutes = Math.floor(diff / 60);
+                    const seconds = diff % 60;
+                    this.elements.statTime.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    if (minutes > 0) {
+                        const wpm = Math.round(this.state.wordsCount / (diff / 60));
+                        this.elements.statSpeed.textContent = wpm;
+                    }
+                }
+            },
+
+            toggleStats() {
+                this.elements.statsPanel.style.display = 
+                    this.elements.statsPanel.style.display === 'none' ? 'grid' : 'none';
+            },
+
+            handleHotkeys(event) {
+                if (event.code === 'Space' && this.state.isPlaying) {
+                    event.preventDefault();
+                    if (this.state.isPaused) {
+                        this.resumeDictation();
+                    } else {
+                        this.pauseDictation();
+                    }
+                } else if (event.code === 'Escape') {
+                    this.stopDictation();
+                }
+            },
+
+            exportAudio() {
+                this.showNotification('Функция экспорта аудио в разработке', 'error');
+            }
+        };
+
+        // Инициализация приложения
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+            
+            // Обработчик загрузки голосов
+            window.speechSynthesis.onvoiceschanged = () => {
+                app.loadVoices();
+            };
+        });
+    </script>
+</body>
+</html>
